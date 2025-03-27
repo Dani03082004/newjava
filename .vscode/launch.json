@@ -1,0 +1,63 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "SoftlearningApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.SoftlearningApplication",
+            "projectName": "softlearning"
+        },
+        {
+            "type": "java",
+            "name": "SoftlearningBookApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.functionals.SoftlearningBookApplication",
+            "projectName": "softlearning_springboot"
+        },
+        {
+            "type": "java",
+            "name": "SoftlearningApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.SoftlearningApplication",
+            "projectName": "softlearning_springboot"
+        },
+        {
+            "type": "java",
+            "name": "SoftlearningEmployeeApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.SoftlearningEmployeeApplication",
+            "projectName": "softlearning_springboot"
+        },
+        {
+            "type": "java",
+            "name": "SoftLearningClientApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.SoftLearningClientApplication",
+            "projectName": "softlearning_springboot"
+        },
+        {
+            "type": "java",
+            "name": "SoftlearningBookApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.SoftlearningBookApplication",
+            "projectName": "softlearning_springboot"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "SoftlearningSpringbootApplication",
+            "request": "launch",
+            "mainClass": "com.example.softlearning_springboot.SoftlearningSpringbootApplication",
+            "projectName": "softlearning_springboot"
+        }
+    ]
+}
