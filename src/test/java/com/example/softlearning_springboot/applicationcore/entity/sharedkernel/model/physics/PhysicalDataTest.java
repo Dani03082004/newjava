@@ -8,13 +8,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
-
-// Preguntar al Jose Meseguer porque sucede este error --> No funciona PhysicalData.getInstance(10.0, 5.0, 15.0, 20.0, false);
-// SI funciona como esta puesto
 
 public class PhysicalDataTest {
 
@@ -22,11 +20,9 @@ public class PhysicalDataTest {
 
     @BeforeEach
     public void setUp() throws BuildException {
-        physicalData = new PhysicalData();
-        physicalData = PhysicalData.getInstance(10.0, 5.0, 15.0, 20.0, false);
+        this.physicalData = PhysicalData.getInstance(10.0, 5.0, 15.0, 20.0, false);
     }
-    
-    
+
     @Test
     void testGetFragile() {
         assertFalse(physicalData.getFragile());
@@ -40,7 +36,6 @@ public class PhysicalDataTest {
     @Test
     void testGetInstanceValid() {
         try {
-            PhysicalData physicalData = new PhysicalData();
             physicalData = physicalData.getInstance(10.0, 5.0, 15.0, 20.0, false);
             assertNotNull(physicalData);
         } catch (BuildException e) {
@@ -51,52 +46,47 @@ public class PhysicalDataTest {
     @Test
     void testGetInstanceWithInvalidHigh() {
         try {
-            PhysicalData physicalData = new PhysicalData();
-            physicalData = physicalData.getInstance(-10.0, 5.0, 15.0, 20.0, false);
+            physicalData.getInstance(-10.0, 5.0, 15.0, 20.0, false);
             fail("Expected BuildException due to invalid high");
         } catch (BuildException e) {
-            assertTrue(e.getMessage().contains("Bad high"));
+            assertEquals("Failed to create PhysicalData: Bad high; ", e.getMessage());
         }
     }
 
     @Test
     void testGetInstanceWithInvalidWidth() {
         try {
-            PhysicalData physicalData = new PhysicalData();
-            physicalData = physicalData.getInstance(10.0, -5.0, 15.0, 20.0, false);
+            physicalData.getInstance(10.0, -5.0, 15.0, 20.0, false);
             fail("Expected BuildException due to invalid width");
         } catch (BuildException e) {
-            assertTrue(e.getMessage().contains("Bad width"));
+            assertEquals("Failed to create PhysicalData: Bad width; ", e.getMessage());
         }
     }
 
     @Test
     void testGetInstanceWithInvalidLength() {
         try {
-            PhysicalData physicalData = new PhysicalData();
-            physicalData = physicalData.getInstance(10.0, 5.0, -15.0, 20.0, false);
+            physicalData.getInstance(10.0, 5.0, -15.0, 20.0, false);
             fail("Expected BuildException due to invalid length");
         } catch (BuildException e) {
-            assertTrue(e.getMessage().contains("Bad length"));
+            assertEquals("Failed to create PhysicalData: Bad length; ", e.getMessage());
         }
     }
 
     @Test
     void testGetInstanceWithInvalidWeight() {
         try {
-            PhysicalData physicalData = new PhysicalData();
-            physicalData = physicalData.getInstance(10.0, 5.0, 15.0, -20.0, false);
+            physicalData.getInstance(10.0, 5.0, 15.0, -20.0, false);
             fail("Expected BuildException due to invalid weight");
         } catch (BuildException e) {
-            assertTrue(e.getMessage().contains("Bad weight"));
+            assertEquals("Failed to create PhysicalData: Bad weight; ", e.getMessage());
         }
     }
 
     @Test
     void testGetInstanceWithInvalidValues() {
         try {
-            PhysicalData physicalData = new PhysicalData();
-            physicalData = physicalData.getInstance(-10.0, -5.0, -15.0, -20.0, false);
+            physicalData.getInstance(-10.0, -5.0, -15.0, -20.0, false);
             fail("Expected BuildException due to invalid values");
         } catch (BuildException e) {
             assertTrue(e.getMessage().contains("Bad high"));
@@ -144,20 +134,27 @@ public class PhysicalDataTest {
     }
 
     @Test
-    void testSetHighInvalid() {
-        physicalData.setHigh(-10);
-        assertEquals(-1, physicalData.setHigh(-10.0));
-    }
-
-    @Test
     void testSetHighValid() {
         assertEquals(0, physicalData.setHigh(10.0));
         assertEquals(10.0, physicalData.getHigh());
     }
 
     @Test
-    void testSetLengthInvalid() {
-        assertEquals(-1, physicalData.setLength(-1.0));
+    void testSetHighInvalid() {
+        physicalData.setHigh(-10);
+        assertEquals(-1, physicalData.setHigh(-10.0));
+    }
+
+    @Test
+    void testSetHighZero() {
+        assertEquals(-1, physicalData.setHigh(0));
+    }
+
+    @Test
+    void testSetHighExceedsLimitsMinim() {
+        // Excede el rango mínimo
+        assertEquals(-1, physicalData.setHigh(-100.0)); // Valor muy bajo
+        assertEquals(10.0, physicalData.getHigh()); // Verifica que el valor no cambió
     }
 
     @Test
@@ -167,8 +164,15 @@ public class PhysicalDataTest {
     }
 
     @Test
-    void testSetWeightInvalid() {
-        assertEquals(-1, physicalData.setWeight(-5.0));
+    void testSetLengthInvalid() {
+        assertEquals(-1, physicalData.setLength(-1.0));
+    }
+
+    @Test
+    void testSetLengthExceedsLimitsMinim() {
+        // Excede el rango mínimo
+        assertEquals(-1, physicalData.setLength(-100.0)); // Valor muy bajo
+        assertEquals(15.0, physicalData.getLength()); // Verifica que el valor no cambió
     }
 
     @Test
@@ -178,8 +182,15 @@ public class PhysicalDataTest {
     }
 
     @Test
-    void testSetWidthInvalid() {
-        assertEquals(-1, physicalData.setWidth(-5.0));
+    void testSetWeightInvalid() {
+        assertEquals(-1, physicalData.setWeight(-5.0));
+    }
+
+    @Test
+    void testSetWeightExceedsLimitsMinim() {
+        // Excede el rango mínimo
+        assertEquals(-1, physicalData.setWeight(-100.0)); // Valor muy bajo
+        assertEquals(20.0, physicalData.getWeight()); // Verifica que el valor no cambió
     }
 
     @Test
@@ -189,8 +200,26 @@ public class PhysicalDataTest {
     }
 
     @Test
+    void testSetWidthInvalid() {
+        assertEquals(-1, physicalData.setWidth(-5.0));
+    }
+
+    @Test
+    void testSetWeidthExceedsLimitsMinim() {
+        // Excede el rango mínimo
+        assertEquals(-1, physicalData.setWidth(-100.0)); // Valor muy bajo
+        assertEquals(5.0, physicalData.getWidth()); // Verifica que el valor no cambió
+    }
+
+    @Test
+    void testGetInstanceWithZeroValues() {
+        assertThrows(BuildException.class, () -> {
+            PhysicalData.getInstance(0.0, 0.0, 0.0, 0.0, false);
+        });
+    }
+
+    @Test
     void testToString() {
-        PhysicalData physicalData = new PhysicalData();
         physicalData.setHigh(10.0);
         physicalData.setWidth(5.0);
         physicalData.setLength(15.0);
