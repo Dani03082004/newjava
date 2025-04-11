@@ -14,56 +14,60 @@ public class DataCheck {
         }
         return 0;
     }
-    
-    public static int checkEmail (String em){
-        if (em == null || em.trim().length() <= 20) {
+
+    public static int checkEmail(String email) {
+        if (email == null || !email.contains("@") || email.indexOf('@') == 0
+                || email.indexOf('@') == email.length() - 1) {
             return -1;
         }
-        return 0;
+        String[] partes = email.split("@");
+        String dominio = partes[1];
+        return dominio.contains(".") ? 0 : -1;
     }
-    
-    public static int checkString(String s, int min){
+
+    public static int checkString(String s, int min) {
         if (s == null || s.trim().length() < min) {
             return -1;
         }
         return 0;
     }
-    
-    public static int checkNumber(int value, int min){
-        if (value < min) {
-            return -1;
-        }
-        return 0;
-    }
-    
-    public static int checkNumber(double value, double min){
+
+    public static int checkNumber(int value, int min) {
         if (value < min) {
             return -1;
         }
         return 0;
     }
 
-    public static LocalDateTime convertStringToDateTime(String s, DateTimeFormatter formatter) throws GeneralDateTimeException {        
+    public static int checkNumber(double value, double min) {
+        if (value < min) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public static LocalDateTime convertStringToDateTime(String s, DateTimeFormatter formatter)
+            throws GeneralDateTimeException {
         try {
             return LocalDateTime.parse(s, formatter);
-        } catch (NullPointerException e ) {
-            throw new GeneralDateTimeException ("HEMOS RECIBIDO UN NULL EN LUGAR DE UNA FECHA");
+        } catch (NullPointerException e) {
+            throw new GeneralDateTimeException("HEMOS RECIBIDO UN NULL EN LUGAR DE UNA FECHA");
         } catch (DateTimeParseException e) {
-            throw new GeneralDateTimeException ("ERROR AL PARSEAR FECHA: " + e.getMessage());
+            throw new GeneralDateTimeException("ERROR AL PARSEAR FECHA: " + e.getMessage());
         } catch (Exception e) {
-            throw new GeneralDateTimeException ("ERROR INESPERADO: " + e);
-        } 
+            throw new GeneralDateTimeException("ERROR INESPERADO: " + e);
+        }
     }
-    
-    public static LocalDate convertStringToDate(String s, DateTimeFormatter formatter) throws GeneralDateTimeException {        
+
+    public static LocalDate convertStringToDate(String s, DateTimeFormatter formatter) throws GeneralDateTimeException {
         try {
             return LocalDate.parse(s, formatter);
-        } catch (NullPointerException e ) {
-            throw new GeneralDateTimeException ("HEMOS RECIBIDO UN NULL EN LUGAR DE UNA FECHA");
+        } catch (NullPointerException e) {
+            throw new GeneralDateTimeException("HEMOS RECIBIDO UN NULL EN LUGAR DE UNA FECHA");
         } catch (DateTimeParseException e) {
-            throw new GeneralDateTimeException ("ERROR AL PARSEAR FECHA: " + e.getMessage());
+            throw new GeneralDateTimeException("ERROR AL PARSEAR FECHA: " + e.getMessage());
         } catch (Exception e) {
-            throw new GeneralDateTimeException ("ERROR INESPERADO: " + e);
-        } 
+            throw new GeneralDateTimeException("ERROR INESPERADO: " + e);
+        }
     }
 }

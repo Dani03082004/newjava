@@ -18,8 +18,11 @@ import org.junit.jupiter.api.Test;
 
 
 public class DataCheckTest {
+
+    // Funciones comprobación DNI
+
     @Test
-    void testCheckBadDNI() {
+    void testCheckDNIwithNull() {
         assertEquals(-1, DataCheck.checkDNI(null));
     }
 
@@ -29,13 +32,60 @@ public class DataCheckTest {
     }
 
     @Test
-    void testCheckEmail() {
+    void testValidarDNIWithInvalidDNI() {
+        assertEquals(-1, DataCheck.checkDNI("12345678"));
+    }
+
+    @Test
+    void testValidarDNIWithEmptyString() {
+        assertEquals(-1, DataCheck.checkDNI(""));
+    }
+
+    @Test
+    void testValidarDNIWithShortDNI() {
+        assertEquals(-1, DataCheck.checkDNI("1234A"));
+    }
+
+    @Test
+    void testValidarDNIWithLongDNI() {
+        assertEquals(-1, DataCheck.checkDNI("123456789A"));
+    }
+
+    // Funciones comprobación Email
+
+    @Test
+    void testCheckValidEmailFormat() {
         assertEquals(0, DataCheck.checkEmail("testunitjava@gmail.com"));
     }
 
     @Test
-    void testCheckBadEmail() {
+    void testCheckInvalidEmailFormat() {
         assertEquals(-1, DataCheck.checkEmail("t@t.com"));
+    }
+
+    @Test
+    void testIsValidEmailFormatWithNull() {
+        assertFalse(Checker.isValidEmailFormat(null));
+    }
+
+    @Test
+    void testIsValidEmailFormatWithEmptyString() {
+        assertFalse(Checker.isValidEmailFormat(""));
+    }
+
+    @Test
+    void testIsValidEmailFormatWithInvalidEmailNoAtSymbol() {
+        assertFalse(Checker.isValidEmailFormat("invalidemail.com"));
+    }
+
+    @Test
+    void testIsValidEmailFormatWithInvalidEmailNoDomain() {
+        assertFalse(Checker.isValidEmailFormat("user@"));
+    }
+
+    @Test
+    void testIsValidEmailFormatWithInvalidEmailNoDotInDomain() {
+        assertFalse(Checker.isValidEmailFormat("user@domain"));
     }
 
     // Con integers

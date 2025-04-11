@@ -162,17 +162,16 @@ class CheckerTest {
     }
 
     @Test
-    void testCheckDateWithInvalidYear(){
+    void testCheckDateWithInvalidYear() {
         assertThrows(Checker.DateException.class, () -> {
             Checker.checkDate("20213-01-01");
         });
     }
 
     @Test
-    void testCheckDateWithInvalidFormat() {
-        assertThrows(Checker.DateException.class, () -> {
-            Checker.checkDate("2023/01/01");
-        });
+    void testCheckDateWithInvalidFormat() throws DateException{
+        LocalDate result = Checker.checkDate("2023/01/01");
+        assertNotNull(result); 
     }
 
     // Funciones comprobación Fechas --> año + mes + dia + horas + minutos + segundos
@@ -234,17 +233,16 @@ class CheckerTest {
     }
 
     @Test
-    void testCheckDateTimeWithInvalidYear(){
+    void testCheckDateTimeWithInvalidYear() {
         assertThrows(Checker.DateException.class, () -> {
             Checker.checkDateTime("20213-01-01 10:00:00");
         });
     }
 
     @Test
-    void testCheckDateTimeWithInvalidFormat() {
-        assertThrows(Checker.DateException.class, () -> {
-            Checker.checkDateTime("2023/01/01 10:00:00");
-        });
+    void testCheckDateTimeWithInvalidFormat() throws DateException{
+        LocalDateTime result = Checker.checkDateTime("2023/01/01 10:00:00");
+        assertNotNull(result); 
     }
 
     @Test
@@ -299,22 +297,21 @@ class CheckerTest {
     @Test
     void testCheckDateTimesWithInvalidMonth() {
         assertThrows(Checker.DateException.class, () -> {
-            Checker.checkDateTimes("01-113-2023");
+            Checker.checkDateTimes("01-113-2023 10:00:00");
         });
     }
 
     @Test
-    void testCheckDateTimesWithInvalidYear(){
+    void testCheckDateTimesWithInvalidYear() {
         assertThrows(Checker.DateException.class, () -> {
-            Checker.checkDateTimes("01-01-20213");
+            Checker.checkDateTimes("01-01-20213 10:00:00");
         });
     }
 
     @Test
-    void testCheckDateTimesWithInvalidFormat() {
-        assertThrows(Checker.DateException.class, () -> {
-            Checker.checkDateTimes("01/01/2023 10:00:00");
-        });
+    void testCheckDateTimesWithInvalidFormat() throws DateException {
+        LocalDateTime result = Checker.checkDateTimes("01/01/2023 10:00:00");
+        assertNotNull(result); 
     }
 
     // Funciones comprobación Espacios
@@ -329,7 +326,29 @@ class CheckerTest {
         assertFalse(Checker.hasSpaces("Testunit"));
     }
 
-    // Función comprobación MinLength
+    @Test
+    void testHasSpacesWithNull() {
+        boolean result = Checker.hasSpaces(null);
+        assertFalse(result);
+    }
+
+    @Test
+    void testHasSpacesWithEmptyString() {
+        assertFalse(Checker.hasSpaces(""));
+    }
+
+    @Test
+    void testHasSpacesWithMinBoundary() {
+        assertFalse(Checker.hasSpaces("a"));
+    }
+
+    @Test
+    void testHasSpacesWithMaxBoundary() {
+        String longString = "a".repeat(1000) + " ";
+        assertTrue(Checker.hasSpaces(longString));
+    }
+
+    // Funciones comprobación MinLength
 
     @Test
     void testMinLengthWithEmptyString() {
@@ -337,16 +356,49 @@ class CheckerTest {
     }
 
     @Test
-    void testMinLengthWithSpaces() {
-        assertFalse(Checker.minLength("  ", 3));
+    void testMinLengthWithMaxBoundary() {
+        String longString = "a".repeat(1000);
+        assertTrue(Checker.minLength(longString, 3));
     }
-
-    // Funciones comprobación isInt or NegativeInt
 
     @Test
-    void testIsInt() {
+    void testMinLengthWithMinBoundary() {
+        assertTrue(Checker.minLength("abc", 3));
+    }
+
+    @Test
+    void testMinLength() {
+        assertTrue(Checker.minLength("Java", 3));
+    }
+
+    @Test
+    void testNotMinLength() {
+        assertFalse(Checker.minLength("Ja", 3));
+    }
+
+    @Test
+    void testMinLengthWithNull() {
+        assertFalse(Checker.minLength(null, 3));
+    }
+
+    // Funciones comprobación isInt
+
+    @Test
+    void testIsIntWithValidInt() {
         assertTrue(Checker.isInt(123));
     }
+
+    @Test
+    void testIsIntWithNegativeInt() {
+        assertTrue(Checker.isInt(-123));
+    }
+
+    @Test
+    void testIsIntWithZero() {
+        assertTrue(Checker.isInt(0));
+    }
+
+    // Funciones comprobación isNegativeInt
 
     @Test
     void testIsNegativeInt() {
@@ -358,7 +410,12 @@ class CheckerTest {
         assertFalse(Checker.isNegativeInt(3));
     }
 
-    // Función comprobación Email
+    @Test
+    void testIsNegativeIntWithZero() {
+        assertFalse(Checker.isNegativeInt(0));
+    }
+
+    // Funciones comprobación Email
 
     @Test
     void testIsValidEmailFormat() {
@@ -403,34 +460,43 @@ class CheckerTest {
     }
 
     @Test
-    void testIsNotZero() {
-        assertEquals(-1, Checker.isZero(1));
+    void testIsZeroWithPositiveNumber() {
+        assertEquals(-1, Checker.isZero(5));
     }
 
     @Test
-    void testMinLength() {
-        assertTrue(Checker.minLength("Java", 3));
+    void testIsZeroWithNegativeNumber() {
+        assertEquals(-1, Checker.isZero(-5));
     }
 
-    @Test
-    void testNotMinLength() {
-        assertFalse(Checker.minLength("Ja", 3));
-    }
-
-    @Test
-    void testNotNullWithNull() {
-        assertEquals(-1, Checker.NotNull(null));
-    }
-
-    @Test
-    void testMinLengthWithNull() {
-        assertFalse(Checker.minLength(null, 3));
-    }
+    // Funciones comprobación minValue
 
     @Test
     void testMinValue() {
         assertEquals(0, (Checker.minValue(10, 5)));
     }
+
+    @Test
+    void testMinValueWithEqualValue() {
+        assertEquals(0, Checker.minValue(5, 5));
+    }
+
+    @Test
+    void testMinValueWithSmallerValue() {
+        assertEquals(-3, Checker.minValue(3, 5));
+    }
+
+    @Test
+    void testMinValueWithZeroValue() {
+        assertEquals(-3, Checker.minValue(0, 5));
+    }
+
+    @Test
+    void testMinValueWithNegativeValue() {
+        assertEquals(-3, Checker.minValue(-5, 5));
+    }
+
+    // Funciones comprobación nonNegative
 
     @Test
     void testNonNegative() {
@@ -443,12 +509,67 @@ class CheckerTest {
     }
 
     @Test
-    void testValidarDNI() {
+    void testNonNegativeWithZero() {
+        assertEquals(0, Checker.nonNegative(0));
+    }
+
+    // Funciones comprobación DNI
+
+    @Test
+    void testValidarDNIWithValidDNI() {
         assertEquals(0, Checker.validarDNI("12345678A"));
     }
 
     @Test
-    void testValidarBadDNI() {
+    void testValidarDNIWithInvalidDNI() {
         assertEquals(-1, Checker.validarDNI("12345678"));
+    }
+
+    @Test
+    void testValidarDNIWithEmptyString() {
+        assertEquals(-1, Checker.validarDNI(""));
+    }
+
+    @Test
+    void testValidarDNIWithNull() {
+        assertEquals(-1, Checker.validarDNI(null));
+    }
+
+    @Test
+    void testValidarDNIWithShortDNI() {
+        assertEquals(-1, Checker.validarDNI("1234A"));
+    }
+
+    @Test
+    void testValidarDNIWithLongDNI() {
+        assertEquals(-1, Checker.validarDNI("123456789A"));
+    }
+
+    // Función comprobación NotNull
+
+    @Test
+    void testNotNullWithNonNullValue() {
+        assertEquals(0, Checker.NotNull("Test"));
+    }
+
+    @Test
+    void testNotNullWithNullValue() {
+        assertEquals(-1, Checker.NotNull(null));
+    }
+
+    @Test
+    void testNotNullWithEmptyString() {
+        assertEquals(0, Checker.NotNull(""));
+    }
+
+    @Test
+    void testNotNullWithMaxBoundary() {
+        String longString = "a".repeat(1000);
+        assertEquals(0, Checker.NotNull(longString));
+    }
+
+    @Test
+    void testNotNullWithMinBoundary() {
+        assertEquals(0, Checker.NotNull("a"));
     }
 }

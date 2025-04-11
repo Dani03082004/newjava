@@ -70,8 +70,11 @@ public class Checker {
     }
 
     // Comprueba si la cadena contiene espacios
-    public static boolean hasSpaces(String s) {
-        return s != null && s.contains(" ");
+    public static boolean hasSpaces(String input) {
+        if (input == null) {
+            return false; // Manejar null devolviendo false
+        }
+        return input.contains(" ");
     }
 
     // Función que comprueba si es un número entero
