@@ -9,11 +9,12 @@ import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.m
 
 public class DataCheck {
     public static int checkDNI(String dni) {
-        if (dni == null || dni.trim().length() != 9) {
-            return -1;
+        if (dni == null || !dni.matches("^\\d{8}[A-Z]$")) {
+            return -1; 
         }
         return 0;
     }
+    
 
     public static int checkEmail(String email) {
         if (email == null || !email.contains("@") || email.indexOf('@') == 0

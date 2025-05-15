@@ -78,9 +78,16 @@ public class Provider extends Person implements Stakeholder {
         if (Checker.NotNullEmptyString(work) != 0) {
             return false;
         }
+        if (!Checker.minLength(work, 5)) {
+            return false;
+        }
+        if (Checker.hasSpaces(work)) {
+            return false;
+        }
         this.work = work;
         return true;
     }
+    
 
     public String getUser() {
         return user;
@@ -132,7 +139,7 @@ public class Provider extends Person implements Stakeholder {
     @Override
     public String getData() {
         StringBuilder mensaje_proveedor = new StringBuilder();
-        mensaje_proveedor.append("Información del Proveedor: ");
+        mensaje_proveedor.append("Información del Proveedor:");
         mensaje_proveedor.append(" horario: ").append(this.getSchedule());
         mensaje_proveedor.append(", trabajo: ").append(this.getWork());
         mensaje_proveedor.append(", usuario: ").append(this.getUser());

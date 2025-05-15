@@ -1,5 +1,9 @@
 package com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.stakeholders;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.domainservices.validations.Checker;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
 
@@ -160,15 +164,20 @@ public abstract class Person {
         if (Checker.NotNullEmptyString(birthday) != 0) {
             return false;
         }
-        this.birthday = birthday;
-        return true;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            LocalDate parsedDate = LocalDate.parse(birthday, formatter);
+            this.birthday = birthday;
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     @Override
     public String toString() {
         return "PersonOBJ [id=" + id + ", name=" + name + ", cognoms=" + cognoms + "]";
     }
-    
 
     public String getData() {
         StringBuilder mensaje_persona = new StringBuilder();

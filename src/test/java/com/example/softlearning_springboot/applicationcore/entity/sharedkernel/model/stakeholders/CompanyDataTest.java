@@ -13,17 +13,14 @@ public class CompanyDataTest {
 
     @BeforeEach
     public void setUp() throws BuildException {
-        companyData = new CompanyData(100, "Tech Corp");
+        this.companyData = new CompanyData(100, "Tech Corp");
     }
 
     @Test
     void testGetInstanceValid() {
-        try {
+        assertDoesNotThrow(() -> {
             companyData = new CompanyData(100, "Tech Corp");
-            assertNotNull(companyData);
-        } catch (BuildException e) {
-            fail("Error en el GetInstance de CompanyData: " + e.getMessage());
-        }
+        });
     }
 
     @Test
@@ -74,13 +71,16 @@ public class CompanyDataTest {
     @Test
     void testSetInvalidSocialReason() {
         assertFalse(companyData.setSocialReason(null));
+        assertFalse(companyData.setSocialReason(""));
+        assertFalse(companyData.setSocialReason("Tec"));
+        assertFalse(companyData.setSocialReason("T"));
     }
 
     @Test
     void testGetCompanyType() {
         try {
             companyData = new CompanyData(100, "Tech Corp");
-            assertEquals("Medium Company", companyData.getCompanytype());  
+            assertEquals("Medium Company", companyData.getCompanytype());
         } catch (BuildException e) {
             fail("Bad CompanyData: " + e.getMessage());
         }
@@ -90,7 +90,7 @@ public class CompanyDataTest {
     void testSetValidWorkersBigCompany() {
         try {
             companyData = new CompanyData(300, "Tech Corp");
-            assertEquals("Big Company", companyData.getCompanytype());  
+            assertEquals("Big Company", companyData.getCompanytype());
         } catch (BuildException e) {
             fail("Bad CompanyData: " + e.getMessage());
         }
@@ -100,7 +100,7 @@ public class CompanyDataTest {
     void testSetValidWorkersSmallCompany() {
         try {
             companyData = new CompanyData(30, "Tech Corp");
-            assertEquals("Small Company", companyData.getCompanytype());  
+            assertEquals("Small Company", companyData.getCompanytype());
         } catch (BuildException e) {
             fail("Bad CompanyData: " + e.getMessage());
         }
@@ -110,7 +110,7 @@ public class CompanyDataTest {
     void testSetValidWorkersMediumCompany() {
         try {
             companyData = new CompanyData(100, "Tech Corp");
-            assertEquals("Medium Company", companyData.getCompanytype());  
+            assertEquals("Medium Company", companyData.getCompanytype());
         } catch (BuildException e) {
             fail("Bad CompanyData: " + e.getMessage());
         }

@@ -97,10 +97,16 @@ public class Checker {
         return s != null && s.trim().length() > 0;
     }
 
-    // Función que comprueba si tiene el formato correcto con @ y .
+    // Función que comprueba los caracteres de un email
     public static boolean isValidEmailFormat(String s) {
-        return s != null && s.contains("@") && s.contains(".");
+        if (s == null) return false;
+        
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" + 
+                       "[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$";
+        
+        return s.matches(regex);
     }
+    
 
     // Función para eliminar espacios en medio
     public static String removeSpaces(String input) {

@@ -51,10 +51,10 @@ public class CompanyData {
         
         if (workers > 250) {
             companytype = "Big Company";
-        } else if (workers <= 50) {
-            companytype = "Small Company";
-        } else {
+        } else if (workers >= 50) {
             companytype = "Medium Company";
+        } else {
+            companytype = "Small Company";
         }
 
         return true;

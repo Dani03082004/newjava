@@ -157,7 +157,6 @@ public class PersonOBJTest {
         }
     }
 
-    // TODO
     @Test
     void testGetInstancewithInvalidBirthday() {
         try {
@@ -260,43 +259,43 @@ public class PersonOBJTest {
 
     @Test
     void testSetBirthdayValidFormat() {
-        assertTrue(personOBJ.setBirthday("11-11-1990")); // Fecha válida
-        assertTrue(personOBJ.setBirthday("01-01-2000")); // Fecha válida con ceros iniciales
+        assertTrue(personOBJ.setBirthday("11-11-1990")); 
+        assertTrue(personOBJ.setBirthday("01-01-2000")); 
     }
 
     @Test
     void testSetBirthdayInvalidDay() {
-        assertFalse(personOBJ.setBirthday("32-01-1990")); // Día inválido (mayor a 31)
-        assertFalse(personOBJ.setBirthday("00-01-1990")); // Día inválido (menor a 1)
-        assertFalse(personOBJ.setBirthday("111-01-1990")); // Día con 3 dígitos
+        assertFalse(personOBJ.setBirthday("32-01-1990")); 
+        assertFalse(personOBJ.setBirthday("00-01-1990")); 
+        assertFalse(personOBJ.setBirthday("111-01-1990")); 
     }
 
     @Test
     void testSetBirthdayInvalidMonth() {
-        assertFalse(personOBJ.setBirthday("11-13-1990")); // Mes inválido (mayor a 12)
-        assertFalse(personOBJ.setBirthday("11-00-1990")); // Mes inválido (menor a 1)
-        assertFalse(personOBJ.setBirthday("11-111-1990")); // Mes con 3 dígitos
+        assertFalse(personOBJ.setBirthday("11-13-1990")); 
+        assertFalse(personOBJ.setBirthday("11-00-1990")); 
+        assertFalse(personOBJ.setBirthday("11-111-1990")); 
     }
 
     @Test
     void testSetBirthdayInvalidYear() {
-        assertFalse(personOBJ.setBirthday("11-11-99")); // Año con 2 dígitos
-        assertFalse(personOBJ.setBirthday("11-11-199")); // Año con 3 dígitos
-        assertFalse(personOBJ.setBirthday("11-11-19900")); // Año con más de 4 dígitos
+        assertFalse(personOBJ.setBirthday("11-11-99")); 
+        assertFalse(personOBJ.setBirthday("11-11-199")); 
+        assertFalse(personOBJ.setBirthday("11-11-19900")); 
     }
 
     @Test
     void testSetBirthdayInvalidFormat() {
-        assertFalse(personOBJ.setBirthday("1990-11-11")); // Formato incorrecto (año primero)
-        assertFalse(personOBJ.setBirthday("11/11/1990")); // Formato incorrecto (con barras)
-        assertFalse(personOBJ.setBirthday("11.11.1990")); // Formato incorrecto (con puntos)
-        assertFalse(personOBJ.setBirthday("11-11-90")); // Formato incorrecto (año corto)
+        assertFalse(personOBJ.setBirthday("1990-11-11")); 
+        assertFalse(personOBJ.setBirthday("11/11/1990")); 
+        assertFalse(personOBJ.setBirthday("11.11.1990")); 
+        assertFalse(personOBJ.setBirthday("11-11-90")); 
     }
 
     @Test
     void testSetBirthdayEmptyOrNull() {
-        assertFalse(personOBJ.setBirthday("")); // Fecha vacía
-        assertFalse(personOBJ.setBirthday(null)); // Fecha nula
+        assertFalse(personOBJ.setBirthday("")); 
+        assertFalse(personOBJ.setBirthday(null)); 
     }
 
     @Test
@@ -307,6 +306,10 @@ public class PersonOBJTest {
     @Test
     void testSetCognomInvalid() {
         assertFalse(personOBJ.setCognoms("D"));
+        assertFalse(personOBJ.setCognoms(" "));
+        assertFalse(personOBJ.setCognoms(null));
+        assertFalse(personOBJ.setCognoms(""));
+        
     }
 
     @Test
@@ -317,6 +320,14 @@ public class PersonOBJTest {
     @Test
     void testSetEmailInvalid() {
         assertFalse(personOBJ.setEmail(" "));
+        assertFalse(personOBJ.setEmail(null));
+        assertFalse(personOBJ.setEmail("pericodelgado@gmail"));
+        assertFalse(personOBJ.setEmail("pericodelgado@.com"));
+        assertFalse(personOBJ.setEmail("pericodelgado@gmail..com"));
+        assertFalse(personOBJ.setEmail("pericodelgado@gmail@com"));
+        assertFalse(personOBJ.setEmail("pericodelgado@gmail,com"));
+        assertFalse(personOBJ.setEmail("pericodelgado@gmail@com"));
+
     }
 
     @Test
@@ -337,6 +348,8 @@ public class PersonOBJTest {
     @Test
     void testSetNameInvalid() {
         assertFalse(personOBJ.setName("P"));
+        assertFalse(personOBJ.setName(" "));
+        assertFalse(personOBJ.setName(null));
     }
 
     @Test

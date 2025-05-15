@@ -7,7 +7,7 @@ import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.m
 public class CompanyClient extends Client {
     protected CompanyData comp;
 
-    protected CompanyClient() {
+    public CompanyClient() {
         this.comp = new CompanyData();
     }
 
@@ -55,15 +55,15 @@ public class CompanyClient extends Client {
 
     public boolean setWorkers(int workers) {
         if (Checker.isNegativeInt(workers)) {
-            return false; // Devuelve false si es negativo
+            return false; 
         }
 
         if (Checker.minValue(workers, 1) != 0) {
-            return false; // Devuelve false si es menor que 1
+            return false; 
         }
 
         this.comp.setWorkers(workers);
-        return true; // Todo OK
+        return true; 
     }
 
     public boolean setSocialReason(String socialReason) {
@@ -71,9 +71,9 @@ public class CompanyClient extends Client {
             return false;
         }
         if (!Checker.minLength(socialReason, 5)) {
-            return false; // Devuelve false si tiene menos 5 caracteres
+            return false; 
         }
         this.comp.setSocialReason(socialReason);
-        return true; // Todo OK
+        return true; 
     }
 }

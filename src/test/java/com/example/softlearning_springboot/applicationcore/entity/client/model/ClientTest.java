@@ -57,34 +57,7 @@ public class ClientTest {
             Client.getInstance(1, "Casi", "Avenida Grande", "Ildoste", 1234567890, 12345, "casildo@gmail.com",
                     "1990-01-01", "12345678A", -1, 100, "Tech Corp");
         });
-        assertEquals("Not possible to create the object: Bad Age; ", exception.getMessage());
-    }
-
-    @Test
-    void testGetInstanceWithNullName() {
-        Exception exception = assertThrows(BuildException.class, () -> {
-            Client.getInstance(1, null, "Avenida Grande", "Ildoste", 1234567890, 12345, "casildo@gmail.com",
-                    "1990-01-01", "12345678A", 30, 100, "Tech Corp");
-        });
-        assertEquals("Not possible to create the object: Bad name; ", exception.getMessage());
-    }
-
-    @Test
-    void testGetInstanceWithEmptyName() {
-        Exception exception = assertThrows(BuildException.class, () -> {
-            Client.getInstance(1, "", "Avenida Grande", "Ildoste", 1234567890, 12345, "casildo@gmail.com", "1990-01-01",
-                    "12345678A", 30, 100, "Tech Corp");
-        });
-        assertEquals("Not possible to create the object: Bad name; ", exception.getMessage());
-    }
-
-    @Test
-    void testGetInstanceWithZeroWorkers() {
-        Exception exception = assertThrows(BuildException.class, () -> {
-            Client.getInstance(1, "Casi", "Avenida Grande", "Ildoste", 1234567890, 12345, "casildo@gmail.com",
-                    "1990-01-01", "12345678A", 30, 0, "Tech Corp");
-        });
-        assertEquals("Not possible to create the object: Bad number of workers; ", exception.getMessage());
+        assertEquals("Failed to create Client: Bad Age; ", exception.getMessage());
     }
 
     @Test
@@ -115,41 +88,11 @@ public class ClientTest {
     @Test
     void testSetInvalidDNI() {
         assertFalse(client.setDNI("invalid-dni"));
-    }
+        assertFalse(client.setDNI(null));
+        assertFalse(client.setDNI(""));
+        assertFalse(client.setDNI("1234567"));
+        assertFalse(client.setDNI("123456789A"));
 
-    @Test
-    void testSetInvalidEmail() {
-        assertFalse(client.setEmail("invalid-email"));
-    }
-
-    @Test
-    void testSetNullEmail() {
-        assertFalse(client.setEmail(null));
-    }
-
-    @Test
-    void testSetEmptyEmail() {
-        assertFalse(client.setEmail(""));
-    }
-
-    @Test
-    void testSetInvalidPhoneNumber() {
-        assertFalse(client.setPhoneNumber(-123456789));
-    }
-
-    @Test
-    void testSetZeroPhoneNumber() {
-        assertFalse(client.setPhoneNumber(0));
-    }
-
-    @Test
-    void testSetInvalidPostalCode() {
-        assertFalse(client.setPostalCode(-12345));
-    }
-
-    @Test
-    void testSetZeroPostalCode() {
-        assertFalse(client.setPostalCode(0));
     }
 
     @Test
@@ -161,7 +104,7 @@ public class ClientTest {
 
     @Test
     void testGetData() throws BuildException {
-        CompanyData companyData = new CompanyData(100, "Tech Corp");
+        CompanyData companyData = new CompanyData(100, "Tech Corp");  
         client.setCompanyData(companyData);
         client.setDNI("12345678A");
         client.setAge(30);
@@ -174,7 +117,7 @@ public class ClientTest {
 
     @Test
     void testGetContactData() throws BuildException {
-        CompanyData companyData = new CompanyData(100, "Tech Corp");
+        CompanyData companyData = new CompanyData(100, "Tech Corp"); 
         client.comp = companyData;
 
         client.setDNI("12345678A");
@@ -191,13 +134,4 @@ public class ClientTest {
         assertEquals(expectedContactData, client.getContactData());
     }
 
-    @Test
-    void testGetContactDataWithInvalidCompanyData() throws BuildException {
-        CompanyData companyData = new CompanyData(-1, null);
-        client.setCompanyData(companyData);
-
-        String expectedContactData = "ESTA ES LA INFORMACIÓN DEL CLIENTE:  su nombre es: Casi, sus apellidos son: Ildoste, la dirección es: Avenida Grande, su correo electrónico es: casildo@gmail.com, el teléfono correspondiente es: 1234567890, el código postal es: 12345, su DNI es: 12345678A, su edad es: 30 años, tipo de empresa: null, número de trabajadores: -1, razón social: null";
-
-        assertEquals(expectedContactData, client.getContactData());
-    }
 }

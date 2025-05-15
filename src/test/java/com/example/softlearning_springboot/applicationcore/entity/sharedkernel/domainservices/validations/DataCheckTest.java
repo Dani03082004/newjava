@@ -1,21 +1,12 @@
 package com.example.softlearning_springboot.applicationcore.entity.sharedkernel.domainservices.validations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.Test;
-
-// AssertTrue para comprobar si es verdadero, utiliza boleano
-// AssertFalse para comprobar si es falso, utiliza boleano
-// AssertEquals para comparar valores, utiliza valores
-// 0 --> BUENO
-// -1 --> MALO
-
 
 public class DataCheckTest {
 
@@ -51,6 +42,11 @@ public class DataCheckTest {
         assertEquals(-1, DataCheck.checkDNI("123456789A"));
     }
 
+    @Test
+    void testDNIWithSpecialCharacters() {
+        assertEquals(-1, DataCheck.checkDNI("1234!678A"));
+    }
+
     // Funciones comprobación Email
 
     @Test
@@ -60,7 +56,7 @@ public class DataCheckTest {
 
     @Test
     void testCheckInvalidEmailFormat() {
-        assertEquals(-1, DataCheck.checkEmail("t@t.com"));
+        assertEquals(-1, DataCheck.checkEmail("t@tcom"));
     }
 
     @Test
@@ -88,29 +84,44 @@ public class DataCheckTest {
         assertFalse(Checker.isValidEmailFormat("user@domain"));
     }
 
+    @Test
+    void testIsValidEmailFormatWithDoubleAt() {
+        assertFalse(Checker.isValidEmailFormat("test@@gmail.com"));
+    }
+
+    @Test
+    void testIsValidEmailFormatWithInvalidCharacters() {
+        assertFalse(Checker.isValidEmailFormat("test!@gmail.com"));
+    }
+
     // Con integers
     @Test
     void testCheckNumber() {
         assertEquals(0, DataCheck.checkNumber(9, 9));
     }
 
-    // Con integers
     @Test
     void testCheckBadNumber() {
         assertEquals(-1, DataCheck.checkNumber(3, 9));
     }
 
-    // Con doubles
     @Test
-    void testCheckBadNumber2() {
-        assertEquals(-1, DataCheck.checkNumber(3, 9));
+    void testCheckNumberWithZero() {
+        assertEquals(-1, DataCheck.checkNumber(0, 9));
     }
 
     // Con doubles
     @Test
-    void testCheckNumber2() {
-        assertEquals(0, DataCheck.checkNumber(9, 9));
+    void testCheckBadNumber2() {
+        assertEquals(-1, DataCheck.checkNumber(3.0, 9.0));
     }
+
+    @Test
+    void testCheckNumber2() {
+        assertEquals(0, DataCheck.checkNumber(9.0, 9.0));
+    }
+
+    // Strings
 
     @Test
     void testCheckString() {
@@ -121,6 +132,23 @@ public class DataCheckTest {
     void testCheckGoodString() {
         assertEquals(0, DataCheck.checkString("Buenas", 3));
     }
+
+    @Test
+    void testCheckStringWithNull() {
+        assertEquals(-1, DataCheck.checkString(null, 3));
+    }
+
+    @Test
+    void testCheckStringWithEmpty() {
+        assertEquals(-1, DataCheck.checkString("", 3));
+    }
+
+    @Test
+    void testCheckStringAtExactLength() {
+        assertEquals(0, DataCheck.checkString("Hey", 3));
+    }
+
+    // Fechas
 
     @Test
     void testConvertStringToDate() {
@@ -139,6 +167,14 @@ public class DataCheckTest {
     }
 
     @Test
+    void testConvertStringToDateTime() {
+        LocalDateTime expectedDateTime = LocalDateTime.of(2025, 3, 21, 10, 0, 0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String answerdatetime = expectedDateTime.format(formatter);
+        assertTrue(answerdatetime.equals("2025-03-21 10:00:00"));
+    }
+
+    @Test
     void testConvertStringToBadDateTime() {
         LocalDateTime expectedDateTime = LocalDateTime.of(2025, 3, 20, 10, 0, 0);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -146,11 +182,39 @@ public class DataCheckTest {
         assertFalse(answerdatetime.equals("2025-03-21 10:00:00"));
     }
 
+    // Fechas con casos extremos y formatos inválidos
+
     @Test
-    void testConvertStringToDateTime() {
-        LocalDateTime expectedDateTime = LocalDateTime.of(2025, 3, 21, 10, 0, 0);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String answerdatetime = expectedDateTime.format(formatter);
-        assertTrue(answerdatetime.equals("2025-03-21 10:00:00"));
+    void testLeapYearDateValid() {
+        LocalDate date = LocalDate.of(2024, 2, 29); // Año bisiesto
+        assertEquals(29, date.getDayOfMonth());
+    }
+
+    @Test
+    void testLeapYearDateInvalid() {
+        assertThrows(java.time.DateTimeException.class, () -> {
+            LocalDate.of(2023, 2, 29); // No es año bisiesto
+        });
+    }
+
+    @Test
+    void testDateWithThreeDigitDay() {
+        assertThrows(java.time.format.DateTimeParseException.class, () -> {
+            LocalDate.parse("2025-03-123", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        });
+    }
+
+    @Test
+    void testDateWithThreeDigitMonth() {
+        assertThrows(java.time.format.DateTimeParseException.class, () -> {
+            LocalDate.parse("2025-123-10", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        });
+    }
+
+    @Test
+    void testDateWithFiveDigitYear() {
+        assertThrows(java.time.format.DateTimeParseException.class, () -> {
+            LocalDate.parse("10000-03-10", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        });
     }
 }

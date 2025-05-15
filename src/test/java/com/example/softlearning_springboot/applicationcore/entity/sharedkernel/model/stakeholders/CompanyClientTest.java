@@ -2,21 +2,26 @@ package com.example.softlearning_springboot.applicationcore.entity.sharedkernel.
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
 
 public class CompanyClientTest {
 
+    private CompanyClient companyClient;
+
+    @BeforeEach
+    public void setUp() throws BuildException {
+        this.companyClient = CompanyClient.getInstance(100, "Tech Corp", "12345678A", 30);
+    }
+
     @Test
     void testGetInstanceValid() {
-        try {
-            CompanyClient companyClient = CompanyClient.getInstance(100, "Tech Corp", "12345678A", 30);
-            assertNotNull(companyClient);
-        } catch (BuildException e) {
-            fail("Error en el GetInstance de Company Client: " + e.getMessage());
-        }
-    }
+        assertDoesNotThrow(() -> {
+            companyClient = CompanyClient.getInstance(100, "Tech Corp", "12345678A", 30);
+        });
+}
 
     @Test
     void testGetInstanceWithInvalidWorkers() {
@@ -60,26 +65,35 @@ public class CompanyClientTest {
 
     @Test
     void testSetInvalidWorkers() {
-        CompanyClient companyClient = new CompanyClient();
         assertFalse(companyClient.setWorkers(-1));
     }
 
     @Test
     void testSetValidWorkers() {
-        CompanyClient companyClient = new CompanyClient();
         assertTrue(companyClient.setWorkers(50));
     }
     
     @Test
     void testSetInvalidSocialReason() {
-        CompanyClient companyClient = new CompanyClient();
-        assertFalse(companyClient.setSocialReason(null)); 
+        assertFalse(companyClient.setSocialReason(null));
+        assertFalse(companyClient.setSocialReason(""));
+        assertFalse(companyClient.setSocialReason("Tec"));
+        assertFalse(companyClient.setSocialReason("T"));
     }
     
     @Test
     void testSetValidSocialReason() {
-        CompanyClient companyClient = new CompanyClient();
         assertTrue(companyClient.setSocialReason("Tech Corp"));
     }
 
+    @Test
+    void testGetCompanyType() {
+        assertEquals("Medium Company", companyClient.getCompanyType());
+    }
+
+    @Test
+    void testSetCompanyType() {
+        companyClient.setCompanyType("Large Company");
+        assertEquals("Large Company", companyClient.getCompanyType());
+    }
 }

@@ -152,9 +152,8 @@ public class PhysicalDataTest {
 
     @Test
     void testSetHighExceedsLimitsMinim() {
-        // Excede el rango mínimo
-        assertEquals(-1, physicalData.setHigh(-100.0)); // Valor muy bajo
-        assertEquals(10.0, physicalData.getHigh()); // Verifica que el valor no cambió
+        assertEquals(-1, physicalData.setHigh(-100.0)); 
+        assertEquals(10.0, physicalData.getHigh()); 
     }
 
     @Test
@@ -170,9 +169,8 @@ public class PhysicalDataTest {
 
     @Test
     void testSetLengthExceedsLimitsMinim() {
-        // Excede el rango mínimo
-        assertEquals(-1, physicalData.setLength(-100.0)); // Valor muy bajo
-        assertEquals(15.0, physicalData.getLength()); // Verifica que el valor no cambió
+        assertEquals(-1, physicalData.setLength(-100.0)); 
+        assertEquals(15.0, physicalData.getLength()); 
     }
 
     @Test
@@ -188,9 +186,8 @@ public class PhysicalDataTest {
 
     @Test
     void testSetWeightExceedsLimitsMinim() {
-        // Excede el rango mínimo
-        assertEquals(-1, physicalData.setWeight(-100.0)); // Valor muy bajo
-        assertEquals(20.0, physicalData.getWeight()); // Verifica que el valor no cambió
+        assertEquals(-1, physicalData.setWeight(-100.0)); 
+        assertEquals(20.0, physicalData.getWeight()); 
     }
 
     @Test
@@ -206,9 +203,8 @@ public class PhysicalDataTest {
 
     @Test
     void testSetWeidthExceedsLimitsMinim() {
-        // Excede el rango mínimo
-        assertEquals(-1, physicalData.setWidth(-100.0)); // Valor muy bajo
-        assertEquals(5.0, physicalData.getWidth()); // Verifica que el valor no cambió
+        assertEquals(-1, physicalData.setWidth(-100.0)); 
+        assertEquals(5.0, physicalData.getWidth());
     }
 
     @Test
