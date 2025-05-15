@@ -1,3 +1,4 @@
+
 package com.example.softlearning_springboot.applicationcore.entity.course.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,74 +8,136 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 // Falta arreglar el test del constructor de Course, ya que se importa también el Product (y hay que preguntar)
 
 public class CourseTest {
 
-    @Test
-    void testGetCourses() {
-        Course course = new Course();
-        course.setCourses("Java");
-        assertEquals("Java", course.getCourses());
+    private Course course;
+
+    @BeforeEach
+    public void setUp() throws BuildException {
+        course = Course.getInstance("Javasss", 10, "Javasss", "Programming", 10, "Español", "Javasss", "Perico");
     }
 
     @Test
-    void testGetDuration() {
-        Course course = new Course();
-        course.setDuration(10);
-        assertEquals(10, course.getDuration());
-    }
-
-    @Test
-    void testGetInstance() {
+    void testGetInstanceValid() {
         try {
-            Course course = Course.getInstance("Java", 10, "Java", "Programming", 10, "Español", "Java", "Perico");
-            assertEquals("Java", course.getCourses());
-            assertEquals(10, course.getDuration());
-            assertEquals("Español", course.getLanguages());
-            assertEquals("Perico", course.getTutor());
+            Course.getInstance("Javasss", 10, "Javasss", "Programming", 10, "Español", "Javasss", "Perico");
+            assertNotNull(course);
         } catch (BuildException e) {
-            fail("Error en el GetInstance de Curso");
+            fail("Error en el GetInstance de Curso: " + e.getMessage());
         }
     }
 
     @Test
-    void testGetLanguages() {
-        Course course = new Course();
-        course.setLanguages("Español");
-        assertEquals("Español", course.getLanguages());
+    void testGetInstanceInvalidCourses() {
+        try {
+            Course.getInstance("Javasss", 10, "Javasss", "Programming", 10, "Español", "Jas", "Perico");
+            fail("Expected BuildException due to invalid Courses");
+        } catch (BuildException e) {
+            assertTrue(e.getMessage().contains("Bad courses; "));
+        }
     }
 
     @Test
-    void testGetTutor() {
-        Course course = new Course();
-        course.setTutor("Perico");
-        assertEquals("Perico", course.getTutor());
+    void testGetInstanceInvalidDuration() {
+        try {
+            Course.getInstance("Javasss", -10, "Javasss", "Programming", -10, "Español", "Javasss", "Perico");
+            fail("Expected BuildException due to invalid Duration");
+        } catch (BuildException e) {
+            assertTrue(e.getMessage().contains("Bad duration; "));
+        }
+    }
+
+    @Test
+    void testGetInstanceInvalidLanguages() {
+        try {
+            Course.getInstance("Javassssss", 10, "Javassssss", "Programming", 10, "ES", "Javassssss", "Perico");
+            fail("Expected BuildException due to invalid Languages");
+        } catch (BuildException e) {
+            assertTrue(e.getMessage().contains("Bad languages; "));
+        }
+    }
+
+    @Test
+    void testGetInstanceInvalidTutor() {
+        try {
+            Course.getInstance("Javasss", 10, "Javasss", "Programming", 10, "Español", "Javasss", " ");
+            fail("Expected BuildException due to invalid Tutor");
+        } catch (BuildException e) {
+            assertTrue(e.getMessage().contains("Bad tutor; "));
+        }
+    }
+
+    @Test
+    void testGetCourses() {
+        assertEquals("Javasss", course.getCourses());
     }
 
     @Test
     void testSetCourses() {
-        Course course = new Course();
-        assertTrue(course.setCourses("Java"));    
+        assertTrue(course.setCourses("Javasss"));    
     }
 
     @Test
-    void testSetDuration() {
-        Course course = new Course();
+    void testInvalidSetCourses() {
+        assertFalse(course.setCourses("Ja"));
+        assertFalse(course.setCourses(null));
+        assertFalse(course.setCourses(""));  
+    }
+
+    @Test
+    void testGetDuration() {
+        assertEquals(10, course.getDuration());
+    }
+
+    @Test
+    void testSetDurationValid() {
         assertTrue(course.setDuration(10));
     }
 
     @Test
-    void testSetLanguages() {
-        Course course = new Course();
+    void testSetDurationInvalid() {
+        assertFalse(course.setDuration(-10));
+    }
+
+    @Test
+    void testGetLanguages() {
+        assertEquals("Español", course.getLanguages());
+    }
+
+    @Test
+    void testSetValidLanguages() {
         assertTrue(course.setLanguages("Español"));
     }
 
     @Test
+    void testSetInvalidLanguages() {
+        assertFalse(course.setLanguages("Esp"));
+        assertFalse(course.setLanguages(null));
+        assertFalse(course.setLanguages(""));
+    }
+
+    @Test
+    void testGetTutor() {
+        assertEquals("Perico", course.getTutor());
+    }
+
+    @Test
     void testSetTutor() {
-        Course course = new Course();
         assertTrue(course.setTutor("Perico"));
+    }
+
+    @Test
+    void testSetInvalidTutor() {
+        assertFalse(course.setTutor("Pe"));
+        assertFalse(course.setTutor(null));
+        assertFalse(course.setTutor(""));
     }
 
 }

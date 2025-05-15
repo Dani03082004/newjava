@@ -24,7 +24,7 @@ public class Checker {
 
     // Función para que no sea negativa
     public static int NotNegative(int n) {
-        if (n < 0)
+        if (n <= 0)
             return -1;
         return 0;
     }
@@ -48,6 +48,14 @@ public class Checker {
         }
         return s.trim().length() >= length;
     }
+
+    public static boolean maxLength(String s, int length) {
+        if (s == null) {
+            return false;
+        }
+        return s.trim().length() <= length;
+    }
+
 
     // Función que no sea negativo
     public static int nonNegative(int s) {

@@ -45,6 +45,10 @@ public class Course extends Product {
         return co;
     }
 
+    public int getId() {
+        return getId();
+    }
+
     public int getDuration() {
         return duration;
     }
@@ -68,6 +72,9 @@ public class Course extends Product {
         if (Checker.hasSpaces(languages)) {
             return false; 
         }
+        if (!Checker.minLength(languages, 5)) {
+            return false;
+        }
         this.languages = languages; 
         return true;
     }
@@ -83,6 +90,9 @@ public class Course extends Product {
         if (Checker.hasSpaces(courses)) {
             return false; 
         }
+        if (!Checker.minLength(courses, 5)) {
+            return false;
+        }
         this.courses = courses; 
         return true;
     }
@@ -93,6 +103,12 @@ public class Course extends Product {
 
     public boolean setTutor(String tutor) {
         if (Checker.NotNullEmptyString(tutor) != 0) {
+            return false;
+        }
+        if (Checker.hasSpaces(tutor)) {
+            return false; 
+        }
+        if (!Checker.minLength(tutor, 5)) {
             return false;
         }
         this.tutor = tutor;
@@ -127,11 +143,6 @@ public class Course extends Product {
         mensaje_datos_curso.append(", cursos incluidos: ").append(this.getCourses());
         mensaje_datos_curso.append(", tutor: ").append(this.getTutor());
         return mensaje_datos_curso.toString();
-    }
-
-    public int getId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getId'");
     }
 
 }

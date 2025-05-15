@@ -14,7 +14,6 @@ import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.m
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.physics.Storable;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.products.Product;
 
-
 public class Book extends Product implements Storable {
     protected String languages;
     protected String author;
@@ -34,12 +33,6 @@ public class Book extends Product implements Storable {
         Book bo = new Book();
         StringBuilder message = new StringBuilder();
 
-        try {
-            bo.CheckProductData(nameproduct, price, description, category);
-        } catch (BuildException ex) {
-            System.err.println("Failed to create Book: " + ex.getMessage());
-        }
-
         if (!bo.setLanguages(languages)) {
             message.append("Bad languages; ");
         }
@@ -54,22 +47,31 @@ public class Book extends Product implements Storable {
         }
 
         if (!bo.setDate_publicated(date_publicated)) {
-            message.append("Bad publication date");
+            message.append("Bad publication date; ");
         }
 
         if (!bo.setDate_disponibility(date_disponibility)) {
-            message.append("Bad availabality date");
+            message.append("Bad availability date; ");
         }
 
         try {
             bo.data = PhysicalData.getInstance(high, width, length, weight, fragile);
         } catch (BuildException e) {
             System.err.println("Failed to create Physical Data: " + e.getMessage());
+            message.append("Failed to create Physical Data; ");
+        }
+
+        try {
+            bo.CheckProductData(nameproduct, price, description, category);
+        } catch (BuildException ex) {
+            System.err.println("Failed to create Book: " + ex.getMessage());
+            message.append("Failed to create Book: " + ex.getMessage() + "; ");
         }
 
         if (message.length() > 0) {
             throw new BuildException("Failed to create Book: " + message.toString());
         }
+
         return bo;
     }
 
@@ -79,9 +81,12 @@ public class Book extends Product implements Storable {
 
     public boolean setIsbn(String isbn) {
         if (Checker.NotNullEmptyString(isbn) != 0) {
-            return false; 
+            return false;
         }
         if (!Checker.minLength(isbn, 13)) {
+            return false;
+        }
+        if (!Checker.maxLength(isbn, 13)) {
             return false;
         }
         this.isbn = isbn;
@@ -159,7 +164,7 @@ public class Book extends Product implements Storable {
 
     public boolean setPages(int pages) {
         if (Checker.NotNegative(pages) != 0) {
-            return false; 
+            return false;
         }
         if (Checker.minValue(pages, 10) != 0) { // Si tiene menos de 10 paginas, devuelve false
             return false;
@@ -168,7 +173,8 @@ public class Book extends Product implements Storable {
         return true;
     }
 
-    // --------------------------- PHYSICAL DATA ---------------------------------------------- ///////
+    // --------------------------- PHYSICAL DATA
+    // ---------------------------------------------- ///////
     // Añadir métodos también SET del Physical Data
     public double getHigh() {
         return data.getHigh();
@@ -211,7 +217,7 @@ public class Book extends Product implements Storable {
                     diferenciaPeriodo.getMonths(),
                     diferenciaPeriodo.getYears());
         }
-        return "Bad Get Period"; 
+        return "Bad Get Period";
     }
 
     // Método para obtener el intervalo etntre dos fechas
@@ -221,11 +227,12 @@ public class Book extends Product implements Storable {
         LocalDate fechaInicio = date_publicated.isAfter(fechaHoy) ? date_publicated : fechaHoy;
 
         // Convertimos date_disponibility a LocalDate
-        LocalDate end = date_disponibility.toLocalDate(); 
+        LocalDate end = date_disponibility.toLocalDate();
 
         // Compruebo si la fecha de inicio es anterior a la fecha final
         if (fechaInicio.isAfter(end)) {
-            return fechasArray; // Si la fecha de inicio es después de la fecha final, retorno un listado de fechas vacio
+            return fechasArray; // Si la fecha de inicio es después de la fecha final, retorno un listado de
+                                // fechas vacio
         }
 
         for (LocalDate date = fechaInicio; !date.isAfter(end); date = date.plusDays(dias)) {

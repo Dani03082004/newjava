@@ -7,14 +7,14 @@ import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.d
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.domainservices.validations.Checker.DateException;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
 
+public class OperationOBJ {
 
-public abstract class Operation {
     protected int reference; // referencia de la operacion
     protected String description;
     protected LocalDateTime initdate, finishdate;
     protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    protected Operation() {
+    public OperationOBJ() {
     }
 
     public void CheckOperData(int reference, String description, String initdate)
@@ -48,7 +48,7 @@ public abstract class Operation {
     }
 
     public String getStatus() {
-        return getStatus();
+        return "Status not implemented"; // Implementación básica
     }
 
     public String getDescription() {
@@ -57,6 +57,9 @@ public abstract class Operation {
 
     public boolean setDescription(String description) {
         if (Checker.NotNullEmptyString(description) != 0) {
+            return false;
+        }
+        if (Checker.hasSpaces(description)) {
             return false;
         }
         if (!Checker.minLength(description, 5)) {
@@ -70,7 +73,6 @@ public abstract class Operation {
         return initdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
 
-    // Implementar Order Status --> CREATED --> CONFIRMED
     public boolean setInitDate(String initdate) throws DateException {
         if (Checker.NotNullEmptyString(initdate) == 0) {
             this.initdate = Checker.checkDateTimes(initdate);
@@ -83,7 +85,6 @@ public abstract class Operation {
         return finishdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
 
-    // Implementar Order Status --> DELIVERED --> FINISHED
     public boolean setFinishDate(String finishdate) throws DateException {
         if (Checker.NotNullEmptyString(finishdate) == 0) {
             LocalDateTime date = Checker.checkDateTimes(finishdate);
@@ -97,7 +98,7 @@ public abstract class Operation {
 
     @Override
     public String toString() {
-        return "Operation [reference=" + reference + ", description=" + description + "]";
+        return "OperationOBJ [reference=" + reference + ", description=" + description + "]";
     }
 
     public String getData() {
@@ -112,7 +113,11 @@ public abstract class Operation {
         return mensaje_operation.toString();
     }
 
-    public abstract String getContactData();
+    public String getContactData() {
+        return "Contact data not provided.";
+    }
 
-    public abstract String getDetails();
+    public String getDetails() {
+        return "Details not provided.";
+    }
 }
