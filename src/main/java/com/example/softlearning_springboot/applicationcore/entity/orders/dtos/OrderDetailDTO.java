@@ -1,7 +1,6 @@
 package com.example.softlearning_springboot.applicationcore.entity.orders.dtos;
 
 import jakarta.persistence.*;
-import com.example.softlearning_springboot.applicationcore.entity.orders.dtos.OrderDTO;
 
 
 @Entity

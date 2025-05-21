@@ -11,7 +11,6 @@ import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.m
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 // Falta arreglar el test del constructor de Course, ya que se importa también el Product (y hay que preguntar)
 

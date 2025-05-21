@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.softlearning_springboot.applicationcore.entity.employee.dtos.EmployeeDTO;
 import com.example.softlearning_springboot.applicationcore.entity.employee.persistence.EmployeeRepository;
 
-import jakarta.transaction.Transactional;
 
 public interface JpaEmployeeRepository extends JpaRepository<EmployeeDTO, Integer>, EmployeeRepository {
     public Optional<EmployeeDTO> findById(int id);
@@ -22,9 +21,4 @@ public interface JpaEmployeeRepository extends JpaRepository<EmployeeDTO, Intege
     @Query(value = "SELECT count(*) FROM EmployeeDTO e WHERE e.name LIKE %:name%")
     public Integer countByPartialTitle(String name);
 
-    @Transactional
-    public EmployeeDTO save(EmployeeDTO employee);
-
-    @Transactional
-    public void deleteById(int id);
 }

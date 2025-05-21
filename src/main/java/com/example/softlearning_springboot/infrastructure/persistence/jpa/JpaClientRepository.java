@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.softlearning_springboot.applicationcore.entity.client.dtos.ClientDTO;
 import com.example.softlearning_springboot.applicationcore.entity.client.persistence.ClientRepository;
 
-import jakarta.transaction.Transactional;
 
 public interface JpaClientRepository extends JpaRepository<ClientDTO, Integer>, ClientRepository {
     public Optional<ClientDTO> findById(int id);
@@ -22,9 +21,4 @@ public interface JpaClientRepository extends JpaRepository<ClientDTO, Integer>, 
     @Query(value = "SELECT count(*) FROM ClientDTO c WHERE c.name LIKE %:name%")
     public Integer countByPartialTitle(String name);
     
-    @Transactional
-    public ClientDTO save(ClientDTO client);
-
-    @Transactional
-    public void deleteById(int id);
 }

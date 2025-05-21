@@ -22,20 +22,20 @@ public class OperationOBJTest {
     @BeforeEach
     public void setUp() throws BuildException, DateException {
         operationOBJ = new OperationOBJ();
-        operationOBJ.CheckOperData(1, "Test Description", "2023-01-01");
+        operationOBJ.CheckOperData(1, "Test Description", "01/01/2023 10:00:00");
     }
 
     @Test
     void testGetInstanceValid() {
         assertDoesNotThrow(() -> {
-            operationOBJ.CheckOperData(1, "Test Description", "2023-01-01");
+            operationOBJ.CheckOperData(1, "Test Description", "01/01/2023 10:00:00");
         });
     }
 
     @Test
     void testGetInstanceWithInvalidRef() throws BuildException, DateException {
         try {
-            operationOBJ.CheckOperData(0, "Test Description", "2023-01-01");
+            operationOBJ.CheckOperData(0, "Test Description", "01-01-2023 10:00:00");
             fail("Expected BuildException due to invalid reference");
         } catch (BuildException e) {
             assertTrue(e.getMessage().contains("Bad Reference; "));
@@ -45,17 +45,17 @@ public class OperationOBJTest {
     @Test
     void testGetInstanceWithInvalidDescription() throws BuildException, DateException {
         try {
-            operationOBJ.CheckOperData(1, "", "2023-01-01");
+            operationOBJ.CheckOperData(1, "", "01-01-2023 10:00:00");
             fail("Expected BuildException due to invalid description");
         } catch (BuildException e) {
-            assertTrue(e.getMessage().contains("Bad description; "));
+            assertTrue(e.getMessage().contains("Bad Description; "));
         }
     }
 
     @Test
     void testGetInstanceWithInvalidInitDate() throws BuildException, DateException {
         try {
-            operationOBJ.CheckOperData(1, "Test Description", "202-013-01");
+            operationOBJ.CheckOperData(1, "Test Description", "011-01-2023 10:00:00");
             fail("Expected BuildException due to invalid Init Date");
         } catch (BuildException e) {
             assertTrue(e.getMessage().contains("Bad Init Date; "));
@@ -68,47 +68,114 @@ public class OperationOBJTest {
     }
 
     @Test
+    void testSetReference() {
+        assertTrue(operationOBJ.setReference(2));
+    }
+
+    @Test
+    void testSetReferenceInvalid() {
+        assertFalse(operationOBJ.setReference(-1));
+        assertFalse(operationOBJ.setReference(0));
+    }
+
+    @Test
     void testGetDescription() {
         assertEquals("Test Description", operationOBJ.getDescription());
     }
 
-    // TODO: Comprobar el método getStatus y SetStatus
+    @Test
+    void testSetDescription() {
+        assertTrue(operationOBJ.setDescription("New Description"));
+    }
+
+    @Test
+    void testSetDescriptionInvalid() {
+        assertFalse(operationOBJ.setDescription(""));
+        assertFalse(operationOBJ.setDescription("1234"));
+        assertFalse(operationOBJ.setDescription(null));
+    }
 
     @Test
     void testGetInitdate() {
-        assertEquals("2023-01-01", operationOBJ.getInitdate());
+        assertEquals("01/01/2023 10:00:00", operationOBJ.getInitdate());
     }
 
     @Test
-    void testGetDetails() {
-
-    }
-
-    //TODO: hacer el finish date, añadirlo en la clase operation
-
-    @Test
-    void testGetStatus() {
-
+    void testSetInitDate() throws DateException {
+        assertTrue(operationOBJ.setInitDate("02/01/2023 10:00:00"));
     }
 
     @Test
-    void testSetDescription() {
+    void testSetInitDateInvalidNull() throws DateException {
+        assertFalse(operationOBJ.setInitDate(null));
+        assertFalse(operationOBJ.setInitDate(""));
 
     }
 
     @Test
-    void testSetFinishDate() {
-
+    void testSetInitDateInvalidSeconds() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("02/01/2023 10:00:111"));
+        });
     }
 
     @Test
-    void testSetInitDate() {
-
+    void testSetInitDateInvalidMinutes() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("02/01/2023 10:111:00"));
+        });
     }
 
     @Test
-    void testSetReference() {
+    void testSetInitDateInvalidHour() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("02/01/2023 101:11:00"));
+        });
+    }
 
+    @Test
+    void testSetInitDateInvalidDate() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("0222/01/2023 10:00:00"));
+        });
+    }
+
+    @Test
+    void testSetInitDateInvalidMonth() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("02/011/2023 10:00:00"));
+        });
+    }
+
+    @Test
+    void testSetInitDateInvalidYear() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("02/01/202322 10:00:00"));
+        });
+    }
+
+    @Test
+    void testSetInitDateInvalidFebruary() {
+        assertThrows(DateException.class, () -> {
+            assertFalse(operationOBJ.setInitDate("31/02/2024 10:00:00"));
+        });
+    }
+
+
+    @Test
+    void testGetContactData() throws DateException {
+        operationOBJ.setReference(1);
+        operationOBJ.setDescription("Test Description");
+        operationOBJ.setInitDate("01/01/2023 10:00:00");
+        assertEquals("OperationOBJ [reference=1, description=Test Description, initdate=01/01/2023 10:00:00]", operationOBJ.getContactData());
+    }
+
+    @Test
+    void testGetDetails() throws DateException {
+        operationOBJ.setReference(1);
+        operationOBJ.setDescription("Test Description");
+        operationOBJ.setInitDate("01/01/2023 10:00:00");
+        assertEquals("OperationOBJ [reference=1, description=Test Description, initdate=01/01/2023 10:00:00]", operationOBJ.getDetails());
     }
 
 }

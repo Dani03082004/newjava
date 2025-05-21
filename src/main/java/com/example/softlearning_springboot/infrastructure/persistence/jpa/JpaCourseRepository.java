@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.softlearning_springboot.applicationcore.entity.course.dtos.CourseDTO;
 import com.example.softlearning_springboot.applicationcore.entity.course.persistence.CourseRepository;
 
-import jakarta.transaction.Transactional;
 
 public interface JpaCourseRepository extends JpaRepository<CourseDTO, Integer>, CourseRepository {
     
@@ -23,9 +22,4 @@ public interface JpaCourseRepository extends JpaRepository<CourseDTO, Integer>, 
     @Query(value = "SELECT count(*) FROM CourseDTO co WHERE co.nameproduct LIKE %:nameproduct%")
     public Integer countByPartialName(String nameproduct);
 
-    @Transactional
-    public CourseDTO save(CourseDTO course);
-
-    @Transactional
-    public void deleteById(int id);
 }

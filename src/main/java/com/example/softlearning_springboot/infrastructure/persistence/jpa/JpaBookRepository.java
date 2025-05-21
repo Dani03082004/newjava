@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.example.softlearning_springboot.applicationcore.entity.book.dtos.BookDTO;
 import com.example.softlearning_springboot.applicationcore.entity.book.persistence.BookRepository;
 
-import jakarta.transaction.Transactional;
 
 @Repository
 public interface JpaBookRepository extends JpaRepository<BookDTO, Integer>,BookRepository {
@@ -23,11 +22,5 @@ public interface JpaBookRepository extends JpaRepository<BookDTO, Integer>,BookR
 
     @Query(value = "SELECT count(*) FROM BookDTO b WHERE b.nameproduct LIKE %:nameproduct%")
     public Integer countByPartialTitle(String nameproduct);
-    
-    @Transactional
-    public BookDTO save(BookDTO book);
-
-    @Transactional
-    public void deleteByIsbn(String isbn);
 
 }

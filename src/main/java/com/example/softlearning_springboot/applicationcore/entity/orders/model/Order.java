@@ -506,6 +506,10 @@ public class Order extends Operation implements Storable {
         return status.name();
     }
 
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+    
     public boolean isCancelled() {
         return this.status == OrderStatus.CANCELLED;
     }

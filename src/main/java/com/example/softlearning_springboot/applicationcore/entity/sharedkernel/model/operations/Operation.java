@@ -6,8 +6,6 @@ import java.time.format.DateTimeFormatter;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.domainservices.validations.Checker;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.domainservices.validations.Checker.DateException;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
-
-
 public abstract class Operation {
     protected int reference; // referencia de la operacion
     protected String description;
@@ -17,23 +15,23 @@ public abstract class Operation {
     protected Operation() {
     }
 
-    public void CheckOperData(int reference, String description, String initdate)
-            throws BuildException, DateException {
-        StringBuilder message = new StringBuilder();
-        if (!this.setReference(reference)) {
-            message.append("Bad Reference; ");
-        }
-        if (!this.setDescription(description)) {
-            message.append("Bad description; ");
-        }
-        if (!this.setInitDate(initdate)) {
-            message.append("Bad Init Date; ");
-        }
-
-        if (message.length() > 0) {
-            throw new BuildException("Not possible to create the object: " + message.toString());
+    public boolean CheckOperData(int reference, String description, String initDate) throws BuildException {
+        try {
+            if (!this.setReference(reference)) {
+                throw new BuildException("Bad Reference; ");
+            }
+            if (!this.setDescription(description)) {
+                throw new BuildException("Bad Description; ");
+            }
+            if (!this.setInitDate(initDate)) {
+                throw new BuildException("Bad Init Date; ");
+            }
+            return true;
+        } catch (DateException e) {
+            throw new BuildException("Not possible to create the object: Bad Init Date; " + e.getMessage());
         }
     }
+    
 
     public int getReference() {
         return reference;
@@ -72,12 +70,16 @@ public abstract class Operation {
 
     // Implementar Order Status --> CREATED --> CONFIRMED
     public boolean setInitDate(String initdate) throws DateException {
-        if (Checker.NotNullEmptyString(initdate) == 0) {
-            this.initdate = Checker.checkDateTimes(initdate);
-            return true;
-        }
+            if (Checker.NotNullEmptyString(initdate) == 0) {
+                LocalDateTime date = Checker.checkDateTimes(initdate);
+                if (date != null) {
+                    this.initdate = date;
+                    return true;
+                }
+            }
         return false;
     }
+    
 
     public String getFinishdate() {
         return finishdate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));

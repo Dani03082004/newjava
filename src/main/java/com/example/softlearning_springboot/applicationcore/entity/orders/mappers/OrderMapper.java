@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import com.example.softlearning_springboot.applicationcore.entity.orders.dtos.OrderDTO;
 import com.example.softlearning_springboot.applicationcore.entity.orders.dtos.OrderDetailDTO;
 import com.example.softlearning_springboot.applicationcore.entity.orders.model.Order;
-import com.example.softlearning_springboot.applicationcore.entity.orders.model.OrderDetail;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.domainservices.validations.Checker.DateException;
 import com.example.softlearning_springboot.applicationcore.entity.sharedkernel.model.exceptions.BuildException;
 

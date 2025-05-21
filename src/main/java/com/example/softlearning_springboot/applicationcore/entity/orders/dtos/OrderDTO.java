@@ -11,7 +11,6 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.softlearning_springboot.applicationcore.entity.orders.dtos.OrderDetailDTO;
 
 // Order + OrderDetail
 @Entity
